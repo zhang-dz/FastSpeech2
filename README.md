@@ -159,3 +159,67 @@ Please inform me if you find any mistakes in this repo, or any useful tips to tr
   pages={8588-8592},
   doi={10.1109/ICASSP39728.2021.9413880}}
 ```
+
+# FastSpeech2 模型收敛分析工具
+
+本项目提供了分析TTS模型训练过程收敛趋势的工具和报告。
+
+## 项目内容
+
+- `plot_convergence.py`: 绘制模型收敛趋势图和对比图的Python脚本
+- `模型收敛分析报告.md`: 详细分析两个模型训练和验证过程的报告
+- `output/plots/`: 包含生成的所有图表
+- `output/log/`: 包含模型训练和验证的日志文件
+
+## 如何运行绘图脚本
+
+确保您已安装所需Python库，然后执行以下命令：
+
+```bash
+python plot_convergence.py
+```
+
+脚本将读取以下日志文件：
+- `output/log/attention_train/log.txt`: 原模型训练日志
+- `output/log/attention_val/log.txt`: 原模型验证日志
+- `output/log/train_log.txt`: 新模型训练日志
+- `output/log/validation_log.txt`: 新模型验证日志
+
+## 生成的图表
+
+运行脚本后，将在`output/plots/`目录下生成以下图表：
+
+1. `总损失训练对比.png`: 两个模型训练过程中总损失的对比
+2. `总损失验证对比.png`: 两个模型验证过程中总损失的对比
+3. `原模型训练损失曲线.png`: 原模型各损失组件的训练曲线
+4. `新模型训练损失曲线.png`: 新模型各损失组件的训练曲线
+5. `Mel损失对比.png`: 两个模型Mel损失的对比
+6. `音高损失对比.png`: 两个模型音高损失的对比
+7. `能量损失对比.png`: 两个模型能量损失的对比
+8. `持续时间损失对比.png`: 两个模型持续时间损失的对比
+9. `最终验证损失对比.png`: 两个模型最终验证损失的直方图对比
+10. `收敛速度对比.png`: 两个模型达到特定损失阈值所需训练步数的对比
+
+## 详细分析报告
+
+请查看`模型收敛分析报告.md`获取对两个模型训练过程的详细分析，包括：
+
+- 训练和验证损失对比
+- 各损失组件的分析
+- 收敛速度对比
+- 最终模型性能评估
+- 结论和建议
+
+## 依赖库
+
+运行脚本需要以下Python库：
+- matplotlib
+- numpy
+- re
+- os
+
+可以使用以下命令安装：
+
+```bash
+pip install matplotlib numpy
+```

@@ -6,7 +6,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from transformer.FourierModels import FourierEncoder, FourierDecoder
-from transformer.Layers import PostNet
 from .modules import VarianceAdaptor
 from utils.tools import get_mask_from_lengths
 
@@ -27,7 +26,6 @@ class FastSpeech2FNet(nn.Module):
             model_config["transformer"]["decoder_hidden"],
             preprocess_config["preprocessing"]["mel"]["n_mel_channels"],
         )
-        self.postnet = PostNet()
 
         self.speaker_emb = None
         if model_config["multi_speaker"]:
@@ -97,11 +95,9 @@ class FastSpeech2FNet(nn.Module):
         output, mel_masks = self.decoder(output, mel_masks)
         output = self.mel_linear(output)
 
-        postnet_output = self.postnet(output) + output
 
         return (
             output,
-            postnet_output,
             p_predictions,
             e_predictions,
             log_d_predictions,

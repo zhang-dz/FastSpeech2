@@ -52,7 +52,7 @@ class FourierEncoder(nn.Module):
 
         self.max_seq_len = config["max_seq_len"]
         self.d_model = d_model
-
+        # 这是输入的因素编码器
         self.src_word_emb = nn.Embedding(
             n_src_vocab, d_word_vec, padding_idx=Constants.PAD
         )

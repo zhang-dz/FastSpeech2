@@ -193,7 +193,25 @@ class Preprocessor:
         # Compute mel-scale spectrogram and energy
         mel_spectrogram, energy = Audio.tools.get_mel_from_wav(wav, self.STFT)
         mel_spectrogram = mel_spectrogram[:, : sum(duration)]
-        energy = energy[: sum(duration)]
+        energy = energy[:, : sum(duration)]
+
+        # Calculate Havg
+        n_mels, T = mel_spectrogram.shape
+        Ht_values = []
+        for t in range(T):
+            Et = mel_spectrogram[:, t]
+            sum_Et = np.sum(Et)
+            # Avoid division by zero and log of zero
+            if sum_Et > 1e-6:
+                pt = Et / sum_Et
+                # Avoid log of zero
+                pt = pt[pt > 1e-9]
+                Ht = -np.sum(pt * np.log(pt)) # Using natural logarithm (nats)
+                Ht_values.append(Ht)
+            else:
+                Ht_values.append(0) # Or some other appropriate value for frames with no energy
+
+        Havg = np.mean(Ht_values) if Ht_values else 0
 
         if self.pitch_phoneme_averaging:
             # perform linear interpolation
@@ -244,7 +262,7 @@ class Preprocessor:
         )
 
         return (
-            "|".join([basename, speaker, text, raw_text]),
+            "|".join([basename, speaker, text, raw_text, str(Havg)]),
             self.remove_outlier(pitch),
             self.remove_outlier(energy),
             mel_spectrogram.shape[1],

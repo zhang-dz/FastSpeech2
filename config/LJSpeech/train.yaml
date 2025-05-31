@@ -3,7 +3,7 @@ path:
   log_path: "./output/log/LJSpeech"
   result_path: "./output/result/LJSpeech"
 optimizer:
-  batch_size: 16
+  batch_size: 48
   betas: [0.9, 0.98]
   eps: 0.000000001
   weight_decay: 0.0
@@ -13,8 +13,16 @@ optimizer:
   anneal_steps: [300000, 400000, 500000]
   anneal_rate: 0.3
 step:
-  total_step: 900000
+  total_step: 500000
   log_step: 100
   synth_step: 1000
   val_step: 1000
-  save_step: 100000
+  save_step: 50000
+
+# 课程学习配置
+curriculum:
+  num_levels: 5  # 难度等级数量
+  val_loss_threshold: 0.1  # 相对阈值，表示损失需要改善10%才能进入下一等级
+  min_steps_per_level: 10000  # 每个等级最少训练步数
+  max_steps_per_level: 100000  # 每个等级最多训练步数
+  patience: 5  # 验证损失不下降的容忍步数
